@@ -1,0 +1,32 @@
+{
+  "ligand_smiles": "CC(C)c1cccc(C(C)C)c1O",
+  "protein_pdb": "receptor.pdb",
+  "parameters": {
+    "n_replicas": 10,
+    "simulation_time": 5.0,
+    "n_poses": 10,
+    "enhanced": true,
+    "realistic_coordinates": true
+  },
+  "kinetic_results": {
+    "kon": 395880.9841865788,
+    "koff": 0.39791916830485724,
+    "binding_affinity": 1.0051484769405289e-06,
+    "residence_time": 2.513073205947876,
+    "binding_events": 25000,
+    "unbinding_events": 15000
+  },
+  "docking_results": {
+    "n_poses": 10,
+    "binding_site": {
+      "center": [
+        110.13292307692308,
+        136.34153846153845,
+        141.95892307692304
+      ],
+      "radius": 8.671683379628,
+      "source": "ligand_based"
+    },
+    "coordinate_source": "SDF_file"
+  }
+}
