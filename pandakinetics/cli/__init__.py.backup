@@ -1,0 +1,53 @@
+# pandakinetics/cli/__init__.py
+
+# Try importing from cli.py first, then main.py
+try:
+    from pandakinetics.cli.cli import main, cli
+    __all__ = ['main', 'cli']
+except ImportError:
+    try:
+        from pandakinetics.cli.main import main, cli
+        __all__ = ['main', 'cli']
+    except ImportError:
+        # Create a minimal working main function
+        import click
+        import sys
+        
+        @click.group()
+        def cli():
+            """PandaKinetics: Multi-Scale Structure-Kinetics Simulator"""
+            pass
+        
+        # Import commands if available
+        try:
+            from pandakinetics.cli.commands.predict import predict
+            cli.add_command(predict)
+        except ImportError:
+            pass
+            
+        try:
+            from pandakinetics.cli.commands.benchmark import benchmark
+            cli.add_command(benchmark)
+        except ImportError:
+            pass
+            
+        try:
+            from pandakinetics.cli.commands.visualize import visualize
+            cli.add_command(visualize)
+        except ImportError:
+            pass
+            
+        try:
+            from pandakinetics.cli.commands.validate import validate_config
+            cli.add_command(validate_config)
+        except ImportError:
+            pass
+        
+        def main():
+            try:
+                cli()
+            except Exception as e:
+                click.echo(f"Error: {e}", err=True)
+                sys.exit(1)
+        
+        __all__ = ['main', 'cli']

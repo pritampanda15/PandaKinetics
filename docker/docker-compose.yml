@@ -1,0 +1,34 @@
+# =============================================================================
+# docker-compose.yml - Multi-container setup
+# =============================================================================
+
+version: '3.8'
+
+services:
+  pandakinetics:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.gpu
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - CUDA_VISIBLE_DEVICES=0
+    volumes:
+      - ./data:/app/data
+      - ./results:/app/results
+      - ./examples:/app/examples
+    ports:
+      - "8888:8888"
+    command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
+
+  docs:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    volumes:
+      - ./docs:/app/docs
+    ports:
+      - "8000:8000"
+    command: |
+      bash -c "cd docs && make html && 
+               python -m http.server 8000 --directory build/html"

@@ -1,0 +1,11 @@
+{
+  "state_id": 4,
+  "ligand_smiles": "CC(C)CC1=CC=C(C=C1)C(C)C(=O)O",
+  "binding_energy_kcal_mol": -10.028799057006836,
+  "n_atoms": 20,
+  "coordinates_shape": [
+    20,
+    3
+  ],
+  "pdb_file": "ibuprofen_transition_states/state_004.pdb"
+}

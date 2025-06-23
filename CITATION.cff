@@ -1,0 +1,29 @@
+# ---- CITATION.cff ----
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "PandaKinetics: Multi-Scale Structure-Kinetics Simulator for Drug Design"
+version: "0.1.0"
+date-released: "2025-01-01"
+url: "https://github.com/pandakinetics/pandakinetics"
+repository-code: "https://github.com/pandakinetics/pandakinetics"
+abstract: "A GPU-accelerated toolkit for predicting drug binding kinetics, residence times, and kinetic selectivity using AI-enhanced molecular dynamics simulations."
+keywords:
+  - "drug design"
+  - "molecular dynamics"
+  - "kinetics"
+  - "machine learning"
+  - "GPU computing"
+authors:
+  - family-names: "Team"
+    given-names: "PandaKinetics"
+    email: "contact@pandakinetics.org"
+license: MIT
+preferred-citation:
+  type: article
+  title: "PandaKinetics: Multi-Scale Structure-Kinetics Simulator for Drug Design"
+  authors:
+    - family-names: "Team"
+      given-names: "PandaKinetics"
+  journal: "Journal of Chemical Information and Modeling"
+  year: 2025

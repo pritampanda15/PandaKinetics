@@ -1,0 +1,33 @@
+{
+  "ligand_smiles": "CC(C)c1cccc(C(C)C)c1O",
+  "protein_pdb": "receptor.pdb",
+  "parameters": {
+    "n_replicas": 10,
+    "simulation_time": 1e-06,
+    "n_poses": 10
+  },
+  "kinetic_results": {
+    "kon": 1613535693726.4282,
+    "koff": 2255650.8051013686,
+    "residence_time": 4.4333103232929716e-07,
+    "binding_affinity": 1.3979553187893777e-06,
+    "kinetic_selectivity": {},
+    "pathway_analysis": {
+      "0_0_0_0_0": 1.0
+    },
+    "confidence_intervals": {
+      "kon_ci": [
+        3.0931414585211314e-07,
+        8.928261536311766e-07
+      ],
+      "koff_ci": [
+        1.0037594222467305e-07,
+        1.0000001111620804e-06
+      ],
+      "residence_time_ci": [
+        999999.8888379319,
+        9962546.580750238
+      ]
+    }
+  }
+}

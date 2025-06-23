@@ -1,0 +1,92 @@
+{
+  "system_info": {
+    "timestamp": "2025-06-23T11:42:14.200851",
+    "python_version": "3.10.15",
+    "cpu_count": 48,
+    "memory_gb": 187.63561248779297,
+    "platform": "Linux-4.18.0-553.34.1.el8_10.x86_64-x86_64-with-glibc2.28",
+    "gpu": {
+      "name": "NVIDIA RTX A4500",
+      "memory_gb": 19.66583251953125,
+      "compute_capability": "8.6"
+    }
+  },
+  "benchmarks": {
+    "gpu": {
+      "matrix_1024": {
+        "pytorch_time": 2.703666687011719e-05,
+        "pytorch_gflops": 79428.5648566225,
+        "cupy_time": 0.007902264595031738,
+        "cupy_gflops": 271.75547239333804
+      },
+      "matrix_2048": {
+        "pytorch_time": 1.571178436279297e-05,
+        "pytorch_gflops": 1093438.452775841,
+        "cupy_time": 0.049532532691955566,
+        "cupy_gflops": 346.84011194909345
+      },
+      "matrix_4096": {
+        "pytorch_time": 1.9121170043945313e-05,
+        "pytorch_gflops": 7187789.928970368,
+        "cupy_time": 0.39360244274139405,
+        "cupy_gflops": 349.18216593056206
+      },
+      "matrix_8192": {
+        "pytorch_time": 1.5091896057128906e-05,
+        "pytorch_gflops": 72854439.46962698,
+        "cupy_time": 3.208324694633484,
+        "cupy_gflops": 342.7058457066819
+      }
+    },
+    "docking": {
+      "poses_10": {
+        "time": 0.10011768341064453,
+        "poses_per_second": 99.88245492041418
+      },
+      "poses_25": {
+        "time": 0.25026798248291016,
+        "poses_per_second": 99.89292178717729
+      },
+      "poses_50": {
+        "time": 0.5005218982696533,
+        "poses_per_second": 99.89572918358665
+      },
+      "poses_100": {
+        "time": 1.0010221004486084,
+        "poses_per_second": 99.89789431740314
+      }
+    },
+    "kinetic_simulation": {
+      "states_10": {
+        "time": 0.022109031677246094,
+        "steps_per_second": 452303.8433334771,
+        "binding_events": 5,
+        "unbinding_events": 3
+      },
+      "states_25": {
+        "time": 0.00048232078552246094,
+        "steps_per_second": 20733089.47108255,
+        "binding_events": 5,
+        "unbinding_events": 3
+      },
+      "states_50": {
+        "time": 0.00048828125,
+        "steps_per_second": 20480000.0,
+        "binding_events": 5,
+        "unbinding_events": 3
+      },
+      "states_100": {
+        "time": 0.00047206878662109375,
+        "steps_per_second": 21183353.535353534,
+        "binding_events": 5,
+        "unbinding_events": 3
+      }
+    },
+    "full_pipeline": {
+      "full_pipeline": {
+        "time": 5.005020380020142,
+        "ligand": "CCO"
+      }
+    }
+  }
+}

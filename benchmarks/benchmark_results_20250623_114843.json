@@ -1,0 +1,96 @@
+{
+  "system_info": {
+    "timestamp": "2025-06-23T11:47:50.615895",
+    "python_version": "3.10.15",
+    "cpu_count": 48,
+    "memory_gb": 187.63561248779297,
+    "platform": "Linux-4.18.0-553.34.1.el8_10.x86_64-x86_64-with-glibc2.28",
+    "gpu": {
+      "name": "NVIDIA RTX A4500",
+      "memory_gb": 19.66583251953125,
+      "compute_capability": "8.6"
+    }
+  },
+  "benchmarks": {
+    "gpu": {
+      "matrix_1024": {
+        "pytorch_time": 2.467632293701172e-05,
+        "pytorch_gflops": 87026.0797559516,
+        "cupy_time": 0.007425999641418457,
+        "cupy_gflops": 289.18445350070124
+      },
+      "matrix_2048": {
+        "pytorch_time": 1.4376640319824218e-05,
+        "pytorch_gflops": 1194984.9757533656,
+        "cupy_time": 0.047713279724121094,
+        "cupy_gflops": 360.06473005700434
+      },
+      "matrix_4096": {
+        "pytorch_time": 2.0694732666015624e-05,
+        "pytorch_gflops": 6641252.906721469,
+        "cupy_time": 0.3811099290847778,
+        "cupy_gflops": 360.628110115249
+      },
+      "matrix_8192": {
+        "pytorch_time": 1.5997886657714842e-05,
+        "pytorch_gflops": 68728554.67104901,
+        "cupy_time": 3.0744306325912474,
+        "cupy_gflops": 357.63097599938027
+      }
+    },
+    "docking": {
+      "poses_10": {
+        "time": 0.10011672973632812,
+        "poses_per_second": 99.88340636311679
+      },
+      "poses_25": {
+        "time": 0.2502727508544922,
+        "poses_per_second": 99.89101855732957
+      },
+      "poses_50": {
+        "time": 0.5003888607025146,
+        "poses_per_second": 99.92228829755149
+      },
+      "poses_100": {
+        "time": 1.0009565353393555,
+        "poses_per_second": 99.90443787461449
+      }
+    },
+    "kinetic_simulation": {
+      "states_10": {
+        "time": 0.025135278701782227,
+        "steps_per_second": 397847.18994545884,
+        "binding_events": 5,
+        "unbinding_events": 3
+      },
+      "states_25": {
+        "time": 0.0005712509155273438,
+        "steps_per_second": 17505442.40400668,
+        "binding_events": 5,
+        "unbinding_events": 3
+      },
+      "states_50": {
+        "time": 0.0005903244018554688,
+        "steps_per_second": 16939838.44911147,
+        "binding_events": 5,
+        "unbinding_events": 3
+      },
+      "states_100": {
+        "time": 0.0005502700805664062,
+        "steps_per_second": 18172894.280762564,
+        "binding_events": 5,
+        "unbinding_events": 3
+      }
+    },
+    "full_pipeline": {
+      "full_pipeline": {
+        "time": 5.00412130355835,
+        "ligand": [
+          "CC(C)CC1=CC=C(C=C1)C(C)C(=O)O",
+          "CN1C=NC2=C1C(=O)N(C(=O)N2C)C",
+          "CC1=CC=C(C=C1)C2=CC(=NN2C3=CC=C(C=C3)S(=O)(=O)N)C(F)(F)F"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+# ---- MANIFEST.in ----
+include README.md
+include LICENSE
+include CHANGELOG.md
+include CITATION.cff
+include requirements*.txt
+include pyproject.toml
+
+recursive-include pandakinetics/data *
+recursive-include pandakinetics/models *.pt
+recursive-include docs *.rst *.md *.py
+recursive-include examples *.py *.ipynb
+recursive-include tests *.py *.pdb *.smi
+
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude .DS_Store
+global-exclude *.so
+global-exclude .git*
