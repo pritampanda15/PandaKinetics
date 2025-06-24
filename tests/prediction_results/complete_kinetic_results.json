@@ -9,10 +9,10 @@
     "realistic_coordinates": true
   },
   "kinetic_results": {
-    "kon": 20141759.750599314,
-    "koff": 19.932244961665567,
-    "binding_affinity": 9.895979898713909e-07,
-    "residence_time": 0.05016996338963509,
+    "kon": 20111887.642442886,
+    "koff": 20.610858952354203,
+    "binding_affinity": 1.0248097701609231e-06,
+    "residence_time": 0.048518113791942596,
     "binding_events": 500,
     "unbinding_events": 300
   },
