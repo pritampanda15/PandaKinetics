@@ -3,18 +3,18 @@
   "protein_pdb": "receptor.pdb",
   "parameters": {
     "n_replicas": 10,
-    "simulation_time": 5.0,
+    "simulation_time": 0.1,
     "n_poses": 10,
-    "enhanced": true,
+    "enhanced": false,
     "realistic_coordinates": true
   },
   "kinetic_results": {
-    "kon": 395880.9841865788,
-    "koff": 0.39791916830485724,
-    "binding_affinity": 1.0051484769405289e-06,
-    "residence_time": 2.513073205947876,
-    "binding_events": 25000,
-    "unbinding_events": 15000
+    "kon": 20141759.750599314,
+    "koff": 19.932244961665567,
+    "binding_affinity": 9.895979898713909e-07,
+    "residence_time": 0.05016996338963509,
+    "binding_events": 500,
+    "unbinding_events": 300
   },
   "docking_results": {
     "n_poses": 10,
