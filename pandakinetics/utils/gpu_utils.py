@@ -2,28 +2,77 @@
 # pandakinetics/utils/gpu_utils.py
 # =============================================================================
 
-import torch
-import cupy as cp
 import numpy as np
 from typing import Optional, Union
-from loguru import logger
-import psutil
 import subprocess
+
+# Conditional import for psutil
+try:
+    import psutil
+    PSUTIL_AVAILABLE = True
+except ImportError:
+    PSUTIL_AVAILABLE = False
+
+# Conditional import for logger
+try:
+    from loguru import logger
+except ImportError:
+    import logging
+    logger = logging.getLogger(__name__)
+
+# Conditional imports for GPU libraries
+try:
+    import torch
+    TORCH_AVAILABLE = True
+except ImportError:
+    TORCH_AVAILABLE = False
+    # Create dummy torch for compatibility
+    class torch:
+        class device:
+            def __init__(self, device_str):
+                self.device_str = device_str
+        
+        class cuda:
+            @staticmethod
+            def is_available():
+                return False
+            
+            @staticmethod
+            def device_count():
+                return 0
+
+try:
+    import cupy as cp
+    CUPY_AVAILABLE = True
+except ImportError:
+    CUPY_AVAILABLE = False
 
 
 class GPUUtils:
     """Utilities for GPU management and optimization"""
     
     @staticmethod
-    def get_device(device: Optional[str] = None) -> torch.device:
+    def is_available() -> bool:
+        """Check if GPU is available"""
+        if not TORCH_AVAILABLE:
+            return False
+        return torch.cuda.is_available()
+    
+    @staticmethod
+    def get_device(device: Optional[str] = None):
         """Get optimal GPU device"""
+        
+        if not TORCH_AVAILABLE:
+            logger.warning("PyTorch not available, returning CPU device")
+            return "cpu"
         
         if device is None:
             if torch.cuda.is_available():
                 # Auto-select GPU with most free memory
                 device = GPUUtils.select_best_gpu()
             else:
-                raise RuntimeError("CUDA not available. PandaKinetics requires GPU.")
+                logger.warning("CUDA not available, using CPU")
+                device = "cpu"
         
         if isinstance(device, str):
             device = torch.device(device)
@@ -35,8 +84,9 @@ class GPUUtils:
     def select_best_gpu() -> str:
         """Select GPU with most available memory"""
         
-        if not torch.cuda.is_available():
-            raise RuntimeError("No CUDA GPUs available")
+        if not TORCH_AVAILABLE or not torch.cuda.is_available():
+            logger.warning("No CUDA GPUs available, returning CPU")
+            return "cpu"
         
         best_gpu = 0
         max_free_memory = 0
@@ -55,8 +105,29 @@ class GPUUtils:
         return f"cuda:{best_gpu}"
     
     @staticmethod
+    def set_device(device: str):
+        """Set the current GPU device"""
+        if not TORCH_AVAILABLE:
+            logger.warning("PyTorch not available, cannot set device")
+            return
+        
+        if device.startswith('cuda') and not torch.cuda.is_available():
+            logger.warning(f"CUDA not available, cannot set device to {device}")
+            return
+        
+        try:
+            torch.cuda.set_device(device)
+            logger.info(f"Set device to: {device}")
+        except Exception as e:
+            logger.error(f"Failed to set device to {device}: {e}")
+    
+    @staticmethod
     def optimize_memory():
         """Optimize GPU memory usage"""
+        
+        if not TORCH_AVAILABLE:
+            logger.warning("PyTorch not available, cannot optimize memory")
+            return
         
         if torch.cuda.is_available():
             # Clear cache

@@ -12,13 +12,68 @@ This module implements key concepts from Boltz-2:
 4. Multi-scale affinity prediction (Ki, Kd, IC50)
 """
 
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from typing import Dict, List, Optional, Tuple, Union
 import numpy as np
-from loguru import logger
+from typing import Dict, List, Optional, Tuple, Union
 import math
+
+# Conditional imports
+try:
+    from loguru import logger
+except ImportError:
+    import logging
+    logger = logging.getLogger(__name__)
+
+try:
+    import torch
+    import torch.nn as nn
+    import torch.nn.functional as F
+    TORCH_AVAILABLE = True
+except ImportError:
+    TORCH_AVAILABLE = False
+    # Create dummy torch modules for compatibility
+    class torch:
+        class Tensor:
+            pass
+        class device:
+            def __init__(self, device_str):
+                self.device_str = device_str
+    
+    class nn:
+        class Module:
+            def __init__(self):
+                pass
+        class Linear:
+            def __init__(self, *args, **kwargs):
+                pass
+        class Sequential:
+            def __init__(self, *args, **kwargs):
+                pass
+        class ReLU:
+            def __init__(self, *args, **kwargs):
+                pass
+        class Dropout:
+            def __init__(self, *args, **kwargs):
+                pass
+        class Sigmoid:
+            def __init__(self, *args, **kwargs):
+                pass
+        class Softplus:
+            def __init__(self, *args, **kwargs):
+                pass
+        class LayerNorm:
+            def __init__(self, *args, **kwargs):
+                pass
+        class ModuleList:
+            def __init__(self, *args, **kwargs):
+                pass
+    
+    class F:
+        @staticmethod
+        def softmax(*args, **kwargs):
+            pass
+        @staticmethod
+        def cosine_similarity(*args, **kwargs):
+            pass
 
 # Try to import advanced libraries with fallbacks
 try:
@@ -28,6 +83,25 @@ try:
 except ImportError:
     TORCH_GEOMETRIC_AVAILABLE = False
     logger.warning("torch-geometric not available. Some features will be limited.")
+    
+    # Create dummy classes for torch-geometric
+    class MessagePassing:
+        def __init__(self, *args, **kwargs):
+            pass
+    
+    class Data:
+        def __init__(self, *args, **kwargs):
+            pass
+    
+    class Batch:
+        def __init__(self, *args, **kwargs):
+            pass
+    
+    def global_mean_pool(*args, **kwargs):
+        return None
+    
+    def global_add_pool(*args, **kwargs):
+        return None
 
 try:
     from transformers import AutoModel, AutoTokenizer

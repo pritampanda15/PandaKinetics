@@ -8,9 +8,18 @@ import click
 import json
 import logging
 from pathlib import Path
-import torch
 import numpy as np
 from typing import Optional, Dict, Any
+
+# Conditional torch import
+try:
+    import torch
+    TORCH_AVAILABLE = True
+except ImportError:
+    TORCH_AVAILABLE = False
+    class torch:
+        class Tensor:
+            pass
 
 # Import PandaKinetics modules
 from pandakinetics import KineticSimulator

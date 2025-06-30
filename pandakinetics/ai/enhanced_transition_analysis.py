@@ -9,13 +9,24 @@ This module provides advanced analysis of transition states and kinetic pathways
 using machine learning approaches inspired by Boltz-2's structural predictions.
 """
 
-import torch
-import torch.nn as nn
 import numpy as np
 from typing import Dict, List, Optional, Tuple, Any
-from loguru import logger
 from pathlib import Path
 import json
+
+# Conditional imports
+try:
+    from loguru import logger
+except ImportError:
+    import logging
+    logger = logging.getLogger(__name__)
+
+try:
+    import torch
+    import torch.nn as nn
+    TORCH_AVAILABLE = True
+except ImportError:
+    TORCH_AVAILABLE = False
 
 try:
     from rdkit import Chem

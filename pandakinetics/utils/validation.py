@@ -4,7 +4,13 @@
 
 import numpy as np
 from typing import Dict, List, Tuple, Optional, Any
-from loguru import logger
+
+# Conditional import for logger
+try:
+    from loguru import logger
+except ImportError:
+    import logging
+    logger = logging.getLogger(__name__)
 
 # Conditional torch import
 try:
@@ -14,6 +20,9 @@ except ImportError:
     TORCH_AVAILABLE = False
     # Create dummy torch
     class torch:
+        class Tensor:
+            pass
+        
         @staticmethod
         def cuda():
             class CUDA:
