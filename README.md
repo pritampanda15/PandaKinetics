@@ -1,8 +1,4 @@
-# =============================================================================
-# README.md
-# =============================================================================
 
-"""
 # PandaKinetics
 
 Multi-Scale Structure-Kinetics Simulator for Drug Design
@@ -171,8 +167,7 @@ If you use PandaKinetics in your research, please cite:
 ```
 @article{pandakinetics2025,
   title={PandaKinetics: Multi-Scale Structure-Kinetics Simulator for Drug Design},
-  author={PandaKinetics Team},
-  journal={Journal of Chemical Information and Modeling},
+  author={Pritam Kumar Panda},
   year={2025}
 }
 ```
@@ -183,9 +178,9 @@ MIT License - see LICENSE file for details.
 
 ## Support
 
-- Documentation: https://pandakinetics.readthedocs.io
-- Issues: https://github.com/pandakinetics/pandakinetics/issues
-- Discussions: https://github.com/pandakinetics/pandakinetics/discussions
+- Documentation: https://pritampanda15.readthedocs.io
+- Issues: https://github.com/pritampanda15/pandakinetics/issues
+- Discussions: https://github.com/pritampanda15/pandakinetics/discussions
 
 ## Contributing
 
@@ -195,9 +190,3 @@ We welcome contributions! Please see CONTRIBUTING.md for guidelines.
 
 - Built on PyTorch, RDKit, OpenMM, and Biotite
 - Inspired by advances in AI-accelerated MD
-- Funded by [Grant Information]
-"""
-
-# =============================================================================
-# End of PandaKinetics Package Implementation
-# =============================================================================
