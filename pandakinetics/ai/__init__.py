@@ -56,11 +56,43 @@ except ImportError:
         def __init__(self, *args, **kwargs):
             raise ImportError("EnhancedSampler requires additional dependencies")
 
+# Import new Boltz-2 inspired modules
+try:
+    from .boltz_inspired_affinity import (
+        BoltzInspiredAffinityPredictor,
+        BoltzInspiredAffinityModule,
+        PairFormerAttention,
+        StructuralEncoder
+    )
+    BOLTZ_AFFINITY_AVAILABLE = True
+except ImportError:
+    BOLTZ_AFFINITY_AVAILABLE = False
+    
+    class BoltzInspiredAffinityPredictor:
+        def __init__(self, *args, **kwargs):
+            raise ImportError("BoltzInspiredAffinityPredictor requires additional dependencies")
+    
+    class BoltzInspiredAffinityModule:
+        def __init__(self, *args, **kwargs):
+            raise ImportError("BoltzInspiredAffinityModule requires additional dependencies")
+
+try:
+    from .enhanced_transition_analysis import TransitionStateAnalyzer
+    TRANSITION_ANALYSIS_AVAILABLE = True
+except ImportError:
+    TRANSITION_ANALYSIS_AVAILABLE = False
+    
+    class TransitionStateAnalyzer:
+        def __init__(self, *args, **kwargs):
+            raise ImportError("TransitionStateAnalyzer requires additional dependencies")
+
 # Module info
 AI_MODULE_INFO = {
     "models_available": MODELS_AVAILABLE,
     "barrier_predictor_available": BARRIER_PREDICTOR_AVAILABLE,
-    "enhanced_sampler_available": ENHANCED_SAMPLER_AVAILABLE
+    "enhanced_sampler_available": ENHANCED_SAMPLER_AVAILABLE,
+    "boltz_affinity_available": BOLTZ_AFFINITY_AVAILABLE,
+    "transition_analysis_available": TRANSITION_ANALYSIS_AVAILABLE
 }
 
 __all__ = [
@@ -70,6 +102,11 @@ __all__ = [
     "MolecularEncoder",
     "EnergyPredictor",
     "KineticPredictor",
+    "BoltzInspiredAffinityPredictor",
+    "BoltzInspiredAffinityModule",
+    "PairFormerAttention",
+    "StructuralEncoder",
+    "TransitionStateAnalyzer",
     "create_model",
     "get_model_info",
     "AI_MODULE_INFO"
