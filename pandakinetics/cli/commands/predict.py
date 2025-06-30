@@ -1511,7 +1511,7 @@ def _create_fallback_boltz_results() -> Dict[str, float]:
 
 
 def _run_enhanced_transition_analysis(
-    poses: List[Dict[str, Any]],
+    poses: list[Dict[str, Any]],
     ligand_smiles: str,
     boltz_results: Optional[Dict[str, float]] = None
 ) -> Dict[str, Any]:
@@ -1551,7 +1551,7 @@ def _run_enhanced_transition_analysis(
         return _create_fallback_transition_analysis(poses)
 
 
-def _create_fallback_transition_analysis(poses: List[Dict[str, Any]]) -> Dict[str, Any]:
+def _create_fallback_transition_analysis(poses: list[Dict[str, Any]]) -> Dict[str, Any]:
     """Create fallback transition analysis when advanced analysis fails"""
     
     n_states = len(poses)
