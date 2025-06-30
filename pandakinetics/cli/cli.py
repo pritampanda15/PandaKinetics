@@ -8,10 +8,10 @@ from pathlib import Path
 from loguru import logger
 import json
 
-from .core import KineticSimulator
-from .utils import check_gpu_availability
-from .visualization import NetworkPlotter, KineticPlotter
-from .cli.enhanced_commands import integrate_enhanced_commands
+from pandakinetics.core.kinetics import KineticSimulator
+from pandakinetics.utils.gpu_utils import GPUUtils
+from pandakinetics.visualization.kinetic_plots import KineticPlotter
+from .enhanced_commands import integrate_enhanced_commands
 
 @click.group()
 @click.option('--verbose', '-v', is_flag=True, help='Enable verbose logging')
@@ -25,9 +25,9 @@ def cli(verbose, gpu):
     logger.add(sys.stderr, level=log_level, format="{time} | {level} | {message}")
     
     # Check GPU availability
-    if not check_gpu_availability():
-        logger.error("GPU not available. PandaKinetics requires CUDA-capable GPU.")
-        sys.exit(1)
+    if not GPUUtils.is_available():
+        logger.warning("GPU not available. Some features may be limited.")
+        # Don't exit - allow CPU operation
     
     logger.info("PandaKinetics initialized")
 
@@ -137,8 +137,6 @@ def benchmark():
     """Run GPU benchmark tests"""
     
     logger.info("Running GPU benchmark...")
-    
-    from .utils.gpu_utils import GPUUtils
     
     # Memory info
     memory_info = GPUUtils.get_memory_info()

@@ -1,7 +1,17 @@
 """Shared data types for PandaKinetics"""
 from dataclasses import dataclass
 from typing import Dict, List, Tuple, Optional
-import torch
+
+# Conditional torch import for CLI compatibility
+try:
+    import torch
+    TORCH_AVAILABLE = True
+except ImportError:
+    TORCH_AVAILABLE = False
+    # Create dummy torch for type hints
+    class torch:
+        class Tensor:
+            pass
 
 @dataclass
 class KineticResults:

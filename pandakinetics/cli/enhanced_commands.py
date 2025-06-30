@@ -14,13 +14,41 @@ from typing import Optional
 
 # PandaKinetics imports
 from pandakinetics import KineticSimulator
-from pandakinetics.visualization.structure_export import (
-    ProteinLigandComplexExporter,
-    TransitionStateExportConfig,
-    export_transition_complexes
-)
-from pandakinetics.utils.config import Config
 from pandakinetics.utils.gpu_utils import GPUUtils
+
+# Try to import visualization modules with fallbacks
+try:
+    from pandakinetics.visualization.structure_export import (
+        ProteinLigandComplexExporter,
+        TransitionStateExportConfig,
+        export_transition_complexes
+    )
+    VISUALIZATION_AVAILABLE = True
+except ImportError:
+    VISUALIZATION_AVAILABLE = False
+    
+    # Create dummy classes for compatibility
+    class TransitionStateExportConfig:
+        def __init__(self, **kwargs):
+            pass
+    
+    def export_transition_complexes(*args, **kwargs):
+        return {}
+
+try:
+    from pandakinetics.utils.config import Config
+    CONFIG_AVAILABLE = True
+except ImportError:
+    CONFIG_AVAILABLE = False
+    
+    class Config:
+        @staticmethod
+        def from_file(path):
+            return {}
+        
+        @staticmethod
+        def default():
+            return {}
 
 logger = logging.getLogger(__name__)
 
@@ -91,25 +119,32 @@ def visualize(results, protein, ligand, output, include_protein,
         return 1
     
     # Create export configuration
-    config = TransitionStateExportConfig(
-        include_protein=include_protein,
-        include_ligand=True,
-        include_metadata=True,
-        generate_pymol_script=generate_pymol,
-        generate_vmd_script=generate_vmd,
-        export_interactions=export_interactions,
-        coordinate_precision=coordinate_precision
-    )
+    if VISUALIZATION_AVAILABLE:
+        config = TransitionStateExportConfig(
+            include_protein=include_protein,
+            include_ligand=True,
+            include_metadata=True,
+            generate_pymol_script=generate_pymol,
+            generate_vmd_script=generate_vmd,
+            export_interactions=export_interactions,
+            coordinate_precision=coordinate_precision
+        )
+    else:
+        config = TransitionStateExportConfig()
     
     try:
         # Export transition complexes
-        exported_files = export_transition_complexes(
-            results_dir=str(results_path),
-            protein_pdb=str(protein_path),
-            ligand_smiles=ligand,
-            output_dir=str(output_path),
-            config=config
-        )
+        if VISUALIZATION_AVAILABLE:
+            exported_files = export_transition_complexes(
+                results_dir=str(results_path),
+                protein_pdb=str(protein_path),
+                ligand_smiles=ligand,
+                output_dir=str(output_path),
+                config=config
+            )
+        else:
+            click.echo("⚠️  Visualization features not available. Install visualization dependencies.")
+            exported_files = {}
         
         # Print summary
         click.echo(f"\n✅ Visualization export completed!")
@@ -144,156 +179,8 @@ def visualize(results, protein, ligand, output, include_protein,
         return 1
 
 
-# Enhanced predict command
-@click.command()
-@click.option('--ligand', '-l', required=True,
-              help='Ligand SMILES string')
-@click.option('--protein', '-p', required=True,
-              help='Protein PDB file')
-@click.option('--output', '-o', default='prediction_results',
-              help='Output directory for results')
-@click.option('--n-replicas', '-n', default=8, type=int,
-              help='Number of simulation replicas')
-@click.option('--simulation-time', '-t', default=1e-6, type=float,
-              help='Maximum simulation time (seconds)')
-@click.option('--temperature', default=310.15, type=float,
-              help='Simulation temperature (K)')
-@click.option('--n-poses', default=50, type=int,
-              help='Number of docking poses to generate')
-@click.option('--auto-visualize/--no-auto-visualize', default=False,
-              help='Automatically generate visualizations after prediction')
-@click.option('--export-complexes/--no-export-complexes', default=False,
-              help='Export protein-ligand transition state complexes')
-@click.option('--gpu', default=None,
-              help='GPU device to use (e.g. cuda:0, cuda:1)')
-@click.option('--config', '-c', type=click.Path(exists=True),
-              help='Configuration file path')
-@click.option('--verbose', '-v', is_flag=True,
-              help='Enable verbose logging')
-def predict(ligand, protein, output, n_replicas, simulation_time, temperature,
-            n_poses, auto_visualize, export_complexes, gpu, config, verbose):
-    """
-    Enhanced predict command with integrated visualization
-    
-    Examples:
-    
-    \b
-    # Basic prediction
-    pandakinetics predict -l "CCO" -p protein.pdb
-    
-    \b
-    # Full workflow with visualization
-    pandakinetics predict \\
-        -l "CC(C)CC1=CC=C(C=C1)C(C)C(=O)O" \\
-        -p cox2_structure.pdb \\
-        -o ibuprofen_analysis \\
-        --n-replicas 16 \\
-        --auto-visualize \\
-        --export-complexes \\
-        --verbose
-    
-    \b
-    # High-performance prediction
-    pandakinetics predict -l "..." -p protein.pdb \\
-        --gpu cuda:1 --n-replicas 32 --simulation-time 5e-6
-    """
-    
-    if verbose:
-        logging.basicConfig(level=logging.DEBUG)
-    else:
-        logging.basicConfig(level=logging.INFO)
-    
-    logger.info("Starting enhanced kinetic prediction...")
-    
-    # Validate inputs
-    protein_path = Path(protein)
-    output_path = Path(output)
-    
-    if not protein_path.exists():
-        click.echo(f"Error: Protein file {protein_path} not found", err=True)
-        return 1
-    
-    output_path.mkdir(parents=True, exist_ok=True)
-    
-    # Set GPU device
-    if gpu:
-        GPUUtils.set_device(gpu)
-    
-    # Load configuration
-    if config:
-        config_obj = Config.from_file(config)
-    else:
-        config_obj = Config.default()
-    
-    try:
-        # Initialize simulator
-        simulator = KineticSimulator(
-            n_replicas=n_replicas,
-            max_simulation_time=simulation_time,
-            temperature=temperature
-        )
-        
-        logger.info(f"Predicting kinetics for ligand: {ligand}")
-        logger.info(f"Target protein: {protein_path}")
-        logger.info(f"Output directory: {output_path}")
-        
-        # Run prediction using the method we discovered
-        results = simulator.predict_kinetics(
-            ligand_smiles=ligand,
-            protein_pdb=str(protein_path),
-            n_poses=n_poses,
-            output_dir=str(output_path)
-        )
-        
-        # Save results
-        results_file = output_path / "kinetic_results.json"
-        with open(results_file, 'w') as f:
-            json.dump(results, f, indent=2, default=str)
-        
-        # Print summary
-        click.echo(f"\n✅ Kinetic prediction completed!")
-        click.echo(f"📁 Results saved to: {output_path}")
-        
-        if hasattr(results, 'binding_events'):
-            click.echo(f"🔗 Binding events: {results.binding_events}")
-        if hasattr(results, 'unbinding_events'):
-            click.echo(f"🔓 Unbinding events: {results.unbinding_events}")
-        if hasattr(results, 'mean_residence_time'):
-            click.echo(f"⏱️  Mean residence time: {results.mean_residence_time*1e9:.2f} ns")
-        
-        # Auto-visualization if requested
-        if auto_visualize or export_complexes:
-            logger.info("Running automatic visualization...")
-            
-            viz_output = output_path / "visualization"
-            
-            config = TransitionStateExportConfig(
-                include_protein=export_complexes,
-                generate_pymol_script=True,
-                generate_vmd_script=False,
-                export_interactions=True
-            )
-            
-            viz_files = export_transition_complexes(
-                results_dir=str(output_path),
-                protein_pdb=str(protein_path),
-                ligand_smiles=ligand,
-                output_dir=str(viz_output),
-                config=config
-            )
-            
-            click.echo(f"🎬 Visualizations saved to: {viz_output}")
-            
-            if export_complexes:
-                click.echo(f"🧬 Protein-ligand complexes exported")
-                click.echo(f"   To visualize: cd {viz_output} && pymol visualize_complexes.pml")
-        
-        return 0
-        
-    except Exception as e:
-        logger.error(f"Prediction failed: {e}")
-        click.echo(f"❌ Error: {e}", err=True)
-        return 1
+# Import the enhanced predict command with Boltz-2 support
+from .commands.predict import predict
 
 
 # Complete CLI group with enhanced commands

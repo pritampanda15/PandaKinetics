@@ -2,10 +2,25 @@
 # Complete pandakinetics/utils/validation.py with missing functions
 # =============================================================================
 
-import torch
 import numpy as np
 from typing import Dict, List, Tuple, Optional, Any
 from loguru import logger
+
+# Conditional torch import
+try:
+    import torch
+    TORCH_AVAILABLE = True
+except ImportError:
+    TORCH_AVAILABLE = False
+    # Create dummy torch
+    class torch:
+        @staticmethod
+        def cuda():
+            class CUDA:
+                @staticmethod
+                def is_available():
+                    return False
+            return CUDA()
 
 # Import with fallbacks
 try:
@@ -148,17 +163,19 @@ def check_gpu_availability() -> bool:
     gpu_available = False
     
     # Check PyTorch CUDA
-    try:
-        import torch
-        if torch.cuda.is_available():
-            gpu_count = torch.cuda.device_count()
-            device_name = torch.cuda.get_device_name(0)
-            logger.info(f"✓ PyTorch CUDA available: {device_name} ({gpu_count} devices)")
-            gpu_available = True
-        else:
-            logger.info("○ PyTorch CUDA not available")
-    except ImportError:
-        logger.warning("○ PyTorch not available")
+    if TORCH_AVAILABLE:
+        try:
+            if torch.cuda.is_available():
+                gpu_count = torch.cuda.device_count()
+                device_name = torch.cuda.get_device_name(0)
+                logger.info(f"✓ PyTorch CUDA available: {device_name} ({gpu_count} devices)")
+                gpu_available = True
+            else:
+                logger.info("○ PyTorch CUDA not available")
+        except Exception as e:
+            logger.warning(f"○ PyTorch CUDA check failed: {e}")
+    else:
+        logger.info("○ PyTorch not available")
     
     # Check CuPy
     try:
